@@ -1,4 +1,4 @@
-package com.nag.nag;
+package com.nag.model;
 
 import javax.persistence.*;
 import java.util.Date;
