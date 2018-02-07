@@ -1,0 +1,8 @@
+com/nag/rest/JAXRSConfiguration.class
+com/nag/model/Language.class
+com/nag/repository/BookRepository.class
+com/nag/model/Book.class
+com/nag/util/IsbnNumberGenerator.class
+com/nag/util/NumberGenerator.class
+com/nag/util/TextUtil.class
+com/nag/rest/BookEndPoint.class
