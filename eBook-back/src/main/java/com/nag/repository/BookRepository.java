@@ -1,11 +1,15 @@
 package com.nag.repository;
 
 import com.nag.model.Book;
+import com.nag.util.NumberGenerator;
+import com.nag.util.TextUtil;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -18,21 +22,30 @@ public class BookRepository {
     @PersistenceContext(unitName = "persistenceUnit")
     private EntityManager em;
 
-    public Book find(Long id){
+    @Inject
+    private TextUtil textUtil;
+
+    @Inject
+    private NumberGenerator numberGenerator;
+
+    @Transactional(Transactional.TxType.SUPPORTS)
+    public Book find(@NotNull Long id){
         return em.find(Book.class,id);
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public Book create(Book book){
+    public Book create(@NotNull Book book){
+        book.setTitle(textUtil.sanitize(book.getTitle()));
+        book.setIsbn(numberGenerator.generateNumber());
         em.persist(book);
         return book;
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public void delete(Long id){
+    public void delete(@NotNull Long id){
         em.remove(em.getReference(Book.class, id));
     }
-
+    @Transactional(Transactional.TxType.SUPPORTS)
     public List<Book> findAll(){
         TypedQuery<Book> query = em.createQuery("SELECT b from Book b order by b.title DESC ",Book.class);
         return query.getResultList();
